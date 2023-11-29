@@ -14,7 +14,6 @@
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
     <!-- bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
@@ -61,12 +60,10 @@
         .list-header {
             display: flex;
             justify-content: space-between;
-
             width: 50%;
         }
         .list-header .sort-link-group {
             display: flex;
-
         }
         .list-header .sort-link-group div {
             margin-right: 20px;
@@ -106,19 +103,19 @@
             <li class="list-header">
                 <div class="count">총 학생 수: ${sList.size()}명</div>
                 <div class="sort-link-group">
-                    <div><a href="#">학번순</a></div>
-                    <div><a href="#">이름순</a></div>
-                    <div><a href="#">평균순</a></div>
+                    <div><a href="/score/list?sort=num">학번순</a></div>
+                    <div><a href="/score/list?sort=name">이름순</a></div>
+                    <div><a href="/score/list?sort=avg">평균순</a></div>
                 </div>
 
             </li>
 
             <c:forEach var="s" items="${sList}">
                 <li>
-                    # 학번: ${s.stuNum}, 이름: <a href="#">${s.name}</a>,
-                    국어: ${s.kor}점, 영어: ${s.eng}점, 수학: ${s.math}점,
-                    총점: ${s.total}점, 평균: ${s.average}점, 학점: ${s.grade}
-                    <a class="del-btn" href="#">삭제</a>
+                    # 학번: ${s.stuNum},
+                    이름: <a href="/score/detail?stuNum=${s.stuNum}">${s.maskingName}</a>,
+                    평균: ${s.average}점, 학점: ${s.grade}
+                    <a class="del-btn" href="/score/remove/${s.stuNum}">삭제</a>
                 </li>
             </c:forEach>
 
