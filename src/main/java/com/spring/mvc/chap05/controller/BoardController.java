@@ -1,6 +1,7 @@
 package com.spring.mvc.chap05.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -12,4 +13,11 @@ public class BoardController {
     // 4. 글 삭제 요청 (/board/delete : GET)
     // 5. 글 상세보기 요청 (/board/detail : GET)
 
+
+    // 1. 목록 조회 요청
+    @GetMapping("/list")
+    public String showList(){
+        System.out.println("/board/list GET");
+        return "chap05/list";
+    }
 }
