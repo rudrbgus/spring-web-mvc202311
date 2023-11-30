@@ -32,7 +32,6 @@
     </div>
 
     <div class="card-container">
-
         <c:forEach var="b" items="${bList}">
             <div class="card-wrapper">
                 <section class="card" data-bno="${b.boardNo}">
@@ -49,9 +48,7 @@
                         </div>
                     </div>
                     <div class="card-content">
-
                             ${b.shortContent}
-
                     </div>
                 </section>
                 <div class="card-btn-group">
@@ -102,10 +99,8 @@
             confirmDelete.onclick = e => {
                 // 삭제 처리 로직
                 window.location.href = deleteLocation;
-
                 modal.style.display = 'none'; // 모달 창 닫기
             };
-
 
             // 취소 버튼 이벤트
             cancelDelete.onclick = e => {
