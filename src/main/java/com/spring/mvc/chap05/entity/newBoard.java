@@ -26,6 +26,4 @@ public class newBoard extends Board {
         this.shortContent = shortContent;
     }
 
-
-
 }

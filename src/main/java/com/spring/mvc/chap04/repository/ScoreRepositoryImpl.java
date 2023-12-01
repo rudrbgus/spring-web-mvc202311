@@ -31,9 +31,6 @@ public class ScoreRepositoryImpl implements ScoreRepository{
         scoreMap.put(s3.getStuNum(), s3);
     }
 
-
-
-
     @Override
     public List<Score> findAll() {
         // 맵에 있는 모든 성적정보를 꺼내서 리스트에 담아라

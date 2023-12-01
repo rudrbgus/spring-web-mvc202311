@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/board")
 public class BoardController {
@@ -23,7 +25,8 @@ public class BoardController {
     // 1. 목록 조회 요청
     @GetMapping("/list")
     public String showList(Model model){
-        model.addAttribute("bList", BoardService.bList);
+        List<newBoard> all = BoardService.findAll();
+        model.addAttribute("bList", all);
         return "chap05/list";
     }
 
@@ -35,7 +38,7 @@ public class BoardController {
     }
 
     // 3. 글쓰기 등록요청(/board/write : POST)
-    @PostMapping("write1")
+    @PostMapping("write")
     public String write2(BoardRequsetDTO dto){
         System.out.println("/board/write POST");
         BoardService.write(dto);
@@ -45,15 +48,17 @@ public class BoardController {
     // 4. 글 삭제 요청 (/board/delete : GET)
     @GetMapping("delete")
     public String delete(@RequestParam int bno){
-        BoardService.delete(bno);
+        BoardService.remove(bno);
         return "redirect:/board/list";
     }
 
     // 5. 글 상세보기 요청 (/board/detail : GET)
     @GetMapping("detail")
     public String detail(@RequestParam int bno, Model model){
-        newBoard newBoard = BoardService.bList.get(bno);
-        model.addAttribute("b", newBoard);
+        newBoard one = BoardService.getOne(bno);
+        model.addAttribute("b", one);
         return "chap05/detail";
     }
+
+
 }
