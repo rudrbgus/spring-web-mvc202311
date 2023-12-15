@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 // 구현체
-@Repository //< - 빈 등록
+@Repository("mRepo") //< - 빈 등록
 public class ScoreRepositoryImpl implements ScoreRepository{
 
     // 인메모리 저장공간 해시맵

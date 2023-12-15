@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @Getter @Setter
-public class BoardRequsetDTO {
+public class BoardWriteRequsetDTO {
     private String title;
     private String content;
 }

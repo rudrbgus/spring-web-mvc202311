@@ -1,50 +1,53 @@
 package com.spring.mvc.chap05.service;
 
-import com.spring.mvc.chap05.dto.BoardRequsetDTO;
-import com.spring.mvc.chap05.entity.newBoard;
-import com.spring.mvc.chap05.repository.BoardRepositoryImpl;
+import com.spring.mvc.chap05.common.Page;
+import com.spring.mvc.chap05.common.Search;
+import com.spring.mvc.chap05.dto.BoardDetailResponseDTO;
+import com.spring.mvc.chap05.dto.BoardListResponseDTO;
+import com.spring.mvc.chap05.dto.BoardWriteRequsetDTO;
+import com.spring.mvc.chap05.entity.Board;
+import com.spring.mvc.chap05.repository.BoardMapper;
+import com.spring.mvc.chap05.repository.BoardRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+
+@Service
+@RequiredArgsConstructor
 public class BoardService {
-    public static int boardNo;
-    private static BoardRepositoryImpl boardRepositoryImpl;
+    private final BoardMapper boardRepository;
+//    private final BoardRepository boardRepository;
+//
+//    public BoardService(BoardRepository boardRepository) {
+//        this.boardRepository = boardRepository;
+//    }
 
-    static {
-        boardNo=0;
-        boardRepositoryImpl = new BoardRepositoryImpl();
+
+    public void write(BoardWriteRequsetDTO dto) {
+        Board board = new Board(dto);
+        boardRepository.save(board);
     }
 
-    public static void write(BoardRequsetDTO dto) {
-        String shortTitle;
-        String shortContent;
-
-        if(dto.getTitle().length()>7){
-            String substring = dto.getTitle().substring(0, 7);
-            shortTitle = substring+"...";
-        }else{
-            shortTitle = dto.getTitle();
-        }
-        if(dto.getContent().length() > 20){
-            String substring = dto.getContent().substring(0, 20);
-            shortContent = substring+"...";
-        }else{
-            shortContent = dto.getContent();
-        }
-        boardNo +=1;
-        newBoard board = new newBoard(boardNo, dto.getTitle(), dto.getContent(), shortTitle, shortContent);
-        boolean save = boardRepositoryImpl.save(boardNo, board);
+    public  void remove(int bno){
+        boardRepository.delete(bno);
     }
 
-    public static void remove(int bno){
-        boardRepositoryImpl.delete(bno);
+    public List<BoardListResponseDTO> findAll(Search page) {
+        return boardRepository.findAll(page).stream()
+                .map(BoardListResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
-    public static List<newBoard> findAll() {
-        return boardRepositoryImpl.findAll();
+    public  BoardDetailResponseDTO getOne(int bno)
+    {
+        boardRepository.increaseViewCount(bno);
+        return new BoardDetailResponseDTO(boardRepository.findOne(bno));
     }
 
-    public static newBoard getOne(int bno) {
-        return boardRepositoryImpl.findOne(bno);
+    public int getCount(Search search) {
+        return boardRepository.count(search);
     }
 }
