@@ -14,7 +14,7 @@ public interface BoardMapper {
 
     Board findOne(int stuNum);
 
-    void increaseViewCount(int stuNum);
+    void updateViewCount(int stuNum);
 
     List<Board> findAll(Search page);
 

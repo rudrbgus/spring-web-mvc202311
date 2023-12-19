@@ -1,12 +1,11 @@
 package com.spring.mvc.chap05.entity;
 
-import com.spring.mvc.chap05.dto.BoardWriteRequsetDTO;
+import com.spring.mvc.chap05.dto.request.BoardWriteRequsetDTO;
 import lombok.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Setter @Getter
 @ToString @EqualsAndHashCode

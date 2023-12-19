@@ -7,33 +7,21 @@
     <meta charset="UTF-8">
     <title>Insert title here</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">
-
-    <!-- reset -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css">
-
-    <!-- fontawesome css: https://fontawesome.com -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
-
-    <!-- bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <%@ include file="../include/static-head.jsp" %>
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/list.css">
 
 </head>
 
 <body>
-
+<%@ include file="../include/header.jsp" %>
 <div id="wrap">
 
     <div class="main-title-wrapper">
         <ul style="display:flex;">
-            <li style="margin-right: 30px"><a href="/board/list?amount=5">5</a></li>
-            <li style="margin-right: 30px"><a href="/board/list?amount=10">10</a></li>
-            <li style="margin-right: 30px"><a href="/board/list?amount=15">15</a></li>
+            <li style="margin-right: 30px"><a href="/board/list?amount=6&keyword=${s.keyword}&type=${s.type}&pageNo=${s.pageNo}">6</a></li>
+            <li style="margin-right: 30px"><a href="/board/list?amount=18&keyword=${s.keyword}&type=${s.type}&pageNo=${s.pageNo}">18</a></li>
+            <li style="margin-right: 30px"><a href="/board/list?amount=30&keyword=${s.keyword}&type=${s.type}&pageNo=${s.pageNo}">30</a></li>
         </ul>
         <h1 class="main-title">꾸러기 게시판</h1>
         <button class="add-btn">새 글 쓰기</button>
@@ -58,7 +46,11 @@
 
             </form>
         </div>
+
     </div>
+
+
+
     <div class="card-container">
         <c:forEach var="b" items="${bList}">
             <div class="card-wrapper">
@@ -93,25 +85,25 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination pagination-lg pagination-custom">
                 <c:if test="${maker.firstPage}">
-                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=1"><<</a></li>
+                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=1&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}"><<</a></li>
                 </c:if>
 
                 <c:if test="${maker.prev}">
-                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.begin - 1}">prev</a></li>
+                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.begin - 1}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}">prev</a></li>
                 </c:if>
 
                 <c:forEach var="i" begin="${maker.begin}" end="${maker.end}" step="1">
                     <li data-page-num="${i}" class="page-item">
-                        <a class="page-link" href="/board/list?pageNo=${i}">${i}</a>
+                        <a class="page-link" href="/board/list?pageNo=${i}&type=${s.type}&amount=${s.amount}&keyword=${s.keyword}">${i}</a>
                     </li>
                 </c:forEach>
 
                 <c:if test="${maker.next}">
-                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.end + 1}">next</a></li>
+                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.end + 1}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}">next</a></li>
                 </c:if>
 
                 <c:if test="${maker.endPage}">
-                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.finalPage}">>></a></li>
+                    <li class="page-item"><a class="page-link" href="/board/list?pageNo=${maker.finalPage}&type=${s.type}&keyword=${s.keyword}">>></a></li>
                 </c:if>
 
             </ul>
@@ -167,7 +159,7 @@
             // section태그에 붙은 글번호 읽기
             const bno = e.target.closest('section.card').dataset.bno;
             // 요청 보내기
-            window.location.href= '/board/detail?bno=' + bno;
+            window.location.href= '/board/detail?bno=' + bno + '&pageNo=${s.pageNo}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}';
         }
     });
 

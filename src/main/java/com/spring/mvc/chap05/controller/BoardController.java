@@ -1,14 +1,13 @@
 package com.spring.mvc.chap05.controller;
 
-import com.spring.mvc.chap05.common.Page;
 import com.spring.mvc.chap05.common.PageMaker;
 import com.spring.mvc.chap05.common.Search;
-import com.spring.mvc.chap05.dto.BoardDetailResponseDTO;
-import com.spring.mvc.chap05.dto.BoardListResponseDTO;
-import com.spring.mvc.chap05.dto.BoardWriteRequsetDTO;
-import com.spring.mvc.chap05.entity.Board;
+import com.spring.mvc.chap05.dto.response.BoardDetailResponseDTO;
+import com.spring.mvc.chap05.dto.response.BoardListResponseDTO;
+import com.spring.mvc.chap05.dto.request.BoardWriteRequsetDTO;
 import com.spring.mvc.chap05.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
     private final BoardService boardService;
     // 1. 목록 조회 요청 (/board/list : GET)
@@ -30,7 +30,7 @@ public class BoardController {
     // 1. 목록 조회 요청
     @GetMapping("/list")
     public String showList(@ModelAttribute("s") Search page, Model model){
-        System.out.println(page);
+        log.debug("{}", page);
         List<BoardListResponseDTO> all = boardService.findAll(page);
 
         // 페이징 계산 알고리즘 적용
@@ -46,7 +46,7 @@ public class BoardController {
     // 2. 글쓰기 화면요청(/board/write : GET)
     @GetMapping("write")
     public String write(){
-        System.out.println("/board/write GET");
+        log.info("/board/write GET");
         return "chap05/write";
     }
 
@@ -67,7 +67,7 @@ public class BoardController {
 
     // 5. 글 상세보기 요청 (/board/detail : GET)
     @GetMapping("detail")
-    public String detail(@RequestParam int bno, Model model){
+    public String detail(@RequestParam int bno, Model model, @ModelAttribute("s") Search search){
         System.out.println(bno);
         BoardDetailResponseDTO one = boardService.getOne(bno);
         model.addAttribute("b", one);
