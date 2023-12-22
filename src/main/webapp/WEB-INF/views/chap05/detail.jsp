@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -8,12 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판 글쓰기</title>
 
-    <%@include file="../include/static-head.jsp"%>
 
-    <link rel="stylesheet" href="/assets/css/main.css">
-
+    <%@include file="../include/static-head.jsp" %>
 
     <style>
+
+
         .form-container {
             width: 500px;
             margin: auto;
@@ -23,6 +23,7 @@
             border-radius: 4px;
             font-size: 18px;
         }
+
         .form-container h1 {
             font-size: 40px;
             font-weight: 700;
@@ -31,18 +32,21 @@
             margin-bottom: 20px;
             color: #ffffff;
         }
+
         .form-container h2 {
             font-size: 30px;
             color: #222;
             text-align: center;
             margin-bottom: 20px;
         }
+
         label {
             display: block;
             margin-bottom: 5px;
             font-size: 20px;
         }
-        #title{
+
+        #title {
             font-size: 18px;
             width: 100%;
             padding: 8px;
@@ -52,6 +56,7 @@
             margin-bottom: 10px;
             background-color: rgba(255, 255, 255, 0.8);
         }
+
         #content {
             height: 400px;
             font-size: 18px;
@@ -68,11 +73,13 @@
             resize: none;
             height: 200px;
         }
+
         .buttons {
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
         }
+
         button {
             font-size: 20px;
             padding: 10px 20px;
@@ -85,15 +92,19 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
         }
+
         button.list-btn {
             background: #e61e8c;
         }
+
         button:hover {
             background-color: #3d8b40;
         }
+
         button.list-btn:hover {
             background: #e61e8c93;
         }
+
         /* 페이지 css */
         /* 페이지 액티브 기능 */
         .pagination .page-item.p-active a {
@@ -107,11 +118,13 @@
             background: #888 !important;
             color: #fff !important;
         }
+
+
     </style>
 </head>
 <body>
 
-<%@include file="../include/header.jsp"%>
+<%@include file="../include/header.jsp" %>
 
 <div id="wrap" class="form-container">
     <h1>${b.boardNo}번 게시물 내용~ </h1>
@@ -121,8 +134,12 @@
     <label for="content">내용</label>
     <div id="content">${b.content}</div>
     <div class="buttons">
-        <button class="list-btn" type="button" onclick="window.location.href='/board/list?pageNo=${s.pageNo}&type=${s.type}&keyword=${s.keyword}&amount=${s.amount}'">목록</button>
+        <button class="list-btn" type="button"
+                onclick="window.location.href='/board/list?pageNo=${s.pageNo}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}'">
+            목록
+        </button>
     </div>
+
     <!-- 댓글 영역 -->
 
     <div id="replies" class="row">
@@ -145,7 +162,8 @@
                                        class="form-control" placeholder="작성자 이름"
                                        style="margin-bottom: 6px;">
                                 <button id="replyAddBtn" type="button"
-                                        class="btn btn-dark form-control">등록</button>
+                                        class="btn btn-dark form-control">등록
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -203,23 +221,25 @@
                 <div class="modal-footer">
                     <button id="replyModBtn" type="button" class="btn btn-dark">수정</button>
                     <button id="modal-close" type="button" class="btn btn-danger"
-                            data-bs-dismiss="modal">닫기</button>
+                            data-bs-dismiss="modal">닫기
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!— end replyModifyModal —>
+    <!-- end replyModifyModal -->
+
 
 </div>
 
 <script>
-    const URL = "/api/v1/replies";
+    const URL = '/api/v1/replies';
     const bno = '${b.boardNo}';
 
-    // 댓글 관련 비동기 통신 (AJAX) 스크립트
+    // 댓글 관련 비동기통신(AJAX) 스크립트
 
-    // 댓글 페이지 제작
+    // 화면에 페이지들을 렌더링하는 함수
     function renderPage({
                             begin, end, prev, next, page, finalPage
                         }) {
@@ -254,16 +274,17 @@
     }
 
 
-
     // 화면에 댓글 태그들을 렌더링하는 함수
-    function renderReplies(repliyList){
+    function renderReplies({replies, count, pageInfo}) {
+
         let tag = '';
 
-        for (let reply of repliyList.replies ){
-            const { rno, writer, text, regDate} = reply;
+        if (replies !== null && replies.length > 0) {
+            for (let reply of replies) {
 
+                const {rno, writer, text, regDate} = reply;
 
-            tag += `
+                tag += `
         <div id='replyContent' class='card-body' data-replyId='\${rno}'>
             <div class='row user-block'>
                 <span class='col-md-3'>
@@ -272,135 +293,253 @@
                 <span class='offset-md-6 col-md-3 text-right'><b>\${regDate}</b></span>
             </div><br>
             <div class='row'>
-                <div class='col-md-6'>\${text}</div>
-                <div class='et-md-2 col-md-4 text-right'></div>
+                <div class='col-md-9'>\${text}</div>
+                <div class='col-md-3 text-right'>
+                    <a id='replyModBtn' class='btn btn-sm btn-outline-dark' data-bs-toggle='modal' data-bs-target='#replyModifyModal'>수정</a>&nbsp;
+                    <a id='replyDelBtn' class='btn btn-sm btn-outline-dark' href='#'>삭제</a>
+                </div>
             </div>
         </div>
-        `;
-            // 댓글 랜더링
-            document.getElementById("replyData").innerHTML = tag;
-            // 댓글 수 랜더링
-            document.getElementById("replyCnt").innerText = repliyList.count;
+      `;
 
-            // 페이지 렌더링
-            renderPage(repliyList.pageInfo);
 
+
+            } //end for
+
+        }// end if
+        else {
+            tag += "<div id='replyContent' class='card-body'>댓글이 아직 없습니다! ㅠㅠ</div>";
         }
 
+        // 댓글 수 렌더링
+        document.getElementById('replyCnt').innerHTML = count;
+        // 댓글 렌더링
+        document.getElementById('replyData').innerHTML = tag;
+
+        // 페이지 렌더링
+        renderPage(pageInfo);
     }
 
     // 서버에 실시간으로 비동기통신을 해서 JSON을 받아오는 함수
-    function  fetchGetReplies(page = 1){
+    function fetchGetReplies(page = 1) {
+
         fetch(`\${URL}/\${bno}/page/\${page}`)
             .then(res => res.json())
             .then(replyList => {
                 console.log(replyList);
-
                 renderReplies(replyList);
             })
+        ;
     }
 
-    //페이지 클릭 이벤트 핸들러 등록 함수
-    function makePageButtonClickEvent(){
-        const $pageUl = document.querySelector(".pagination");
+    // 페이지 클릭 이벤트 핸들러 등록 함수
+    function makePageButtonClickEvent() {
 
-        $pageUl.onclick = e =>{
-            // 이벤트 타겟이 a링크가 아닌 경우 href 속성을 못가져올 수 도 있으니
-            if(!e.target.matches('.page-item a')) return;
+        const $pageUl = document.querySelector('.pagination');
 
+        $pageUl.onclick = e => {
 
-            e.preventDefault(); // href 링크 이동 기능 중단 : 태그 기본 기능 동작 중단
+            // 이벤트 타겟이 a링크가 아닌경우 href속성을 못가져올 수 있으니 타겟 제한하기
+            if (!e.target.matches('.page-item a')) return;
+
+            // console.log(e.target.getAttribute('href'));
+
+            e.preventDefault(); // href 링크이동 기능 중단 : 태그 기본 기능 동작 중단
 
             // 페이지 번호에 맞는 새로운 댓글 목록 비동기 요청
             fetchGetReplies(e.target.getAttribute('href'));
-        }
+        };
+
     }
 
     // 댓글 등록 처리 핸들러 등록 함수
-    function makeReplyPostClickEvent(){
-        const $addBtn = document.getElementById("replyAddBtn");
+    function makeReplyPostClickEvent() {
+        const $addBtn = document.getElementById('replyAddBtn');
 
-        $addBtn.onclick = e =>{
-            const $replyText = document.getElementById("newReplyText")
-            const $replyWriter = document.getElementById("newReplyWriter");
+        $addBtn.onclick = e => {
 
-            //console.log($replyText.value);
-            //console.log($replyWriter.value);
+            const $replyText = document.getElementById('newReplyText');
+            const $replyWriter = document.getElementById('newReplyWriter');
 
-            const textVal = $replyText.value;
-            const writerVal = $replyWriter.value;
+            // console.log($replyText.value);
+            // console.log($replyWriter.value);
+
+            const textVal = $replyText.value.trim();
+            const writerVal = $replyWriter.value.trim();
+
             // 사용자 입력값 검증
-            if(textVal.trim() === '' || textVal === null){
-                alert("댓글 내용은 필수값입니다!!");
+            if (textVal === '') {
+                alert('댓글 내용은 필수값입니다!!');
                 return;
-            }else if(writerVal.trim() === '' || writerVal.value ===null){
-                alert("댓글 작성자는 필수값입니다!!!")
-            }else if(writerVal.trim().length < 2 || writerVal.trim().length > 8){
-                alert('댓글 작성자는 2글자에서 8 글자 사이로 작성하세요!');
+            } else if (writerVal === '') {
+                alert('댓글 작성자는 필수값입니다!!');
+                return;
+            } else if (writerVal.length < 2 || writerVal.length > 8) {
+                alert('댓글 작성자는 2글자에서 8글자 사이로 작성하세요!');
                 return;
             }
 
 
             // 서버로 보낼 데이터
             const payload = {
-                text : $replyText.value,
-                author : $replyWriter.value,
-                bno : bno
+                text: $replyText.value,
+                author: $replyWriter.value,
+                bno: bno
             };
 
-
-            // GET 방식을 제외한 요청의 정보 만들기
+            // GET방식을 제외한 요청의 정보 만들기
             const requestInfo = {
-                method : 'POST',
+                method: 'POST',
                 headers: {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify(payload)
             };
-
-
-
-
             // 서버에 POST 요청 보내기
             fetch(URL, requestInfo)
-                .then(res =>{
-                    if(res.status === 200){
-                        alert("댓글이 정상 등록되었습니다!");
+                .then(res => {
+                    if (res.status === 200) {
+                        alert('댓글이 정상 등록되었습니다!');
                         return res.json();
-                    }else{
-                        alert("댓글 등록에 실패했습니다!")
+                    } else {
+                        alert('댓글 등록에 실패했습니다!');
                         return res.text();
                     }
                 })
-                .then(responseData =>{
-                    //console.log(responseData);
-                    // 입력창 비우고 새로운 목록 리 랜더링
+                .then(responseData => {
+                    // console.log(responseData);
+                    // 입력창 비우고 새로운 목록 리렌더링
                     $replyWriter.value = '';
                     $replyText.value = '';
 
                     fetchGetReplies(responseData.pageInfo.finalPage);
-                })
-
+                });
         };
+
     }
 
-    //=============== 메인 실행부================//
-    (()=>{
-        //댓글 서버에서 불러오기
+    // 댓글 삭제 + 수정모드진입 이벤트 핸들러 등록 및 처리 함수
+    function makeReplyRemoveClickEvent() {
+
+        const $replyData = document.getElementById('replyData');
+
+        $replyData.onclick = e => {
+
+            e.preventDefault(); // a태그 링크이동 기능 중지
+            // 댓글번호 찾기
+            const rno = e.target.closest('#replyContent').dataset.replyid;
+
+            // 삭제버튼에만 이벤트가 작동하도록 설정
+            if (e.target.matches('#replyDelBtn')) {
+                // console.log('삭제 버튼 클릭!');
+
+                if (!confirm('정말 삭제할까요??')) return;
+
+
+                console.log(rno);
+
+                const requestInfo = {
+                    method: 'DELETE'
+                };
+                // 서버에 삭제 비동기 요청
+                fetch(`\${URL}/\${rno}`, requestInfo)
+                    .then(res => {
+                        if (res.status === 200) {
+                            alert('댓글이 삭제되었습니다!');
+                            return res.json();
+                        } else {
+                            alert('댓글 삭제에 실패했습니다.');
+                            return;
+                        }
+                    })
+                    .then(responseResult => {
+                        renderReplies(responseResult);
+                    });
+            }
+            else if(e.target.matches("#replyModBtn")){
+                console.log("수정 모드 진입!");
+
+                // 클릭한 수정버튼 근처에 있는 댓글내용 읽기
+                const replyText = e.target.parentNode.previousElementSibling.textContent;
+                // console.log(replyText);
+
+                // 읽은 댓글 내용을 모달 바디에 집어넣기
+                document.getElementById("modReplyText").value = replyText;
+
+                // 읽은 댓글의 댓글번호를 모달에 집어넣기
+                const $modal = document.querySelector(".modal")
+                $modal.dataset.rno = rno;
+
+            }
+        };
+
+    }
+
+    // 댓글 수정 클릭 이벤트 처리 함수
+    function makeReplyModifyClickEvent(){
+
+        const $modBtn = document.getElementById('replyModBtn');
+
+        $modBtn.addEventListener('click', e=>{
+
+            const payload = {
+                rno: +document.querySelector(".modal").dataset.rno,
+                text: document.getElementById("modReplyText").value ,
+                bno: +bno
+            }
+            console.log(payload)
+
+            const requestInfo ={
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }
+
+            fetch(URL, requestInfo)
+                .then(res =>{
+                    if(res.status === 200){
+                        alert("댓글이 수정되었습니다.");
+                        // modal창 닫기
+                        document.getElementById("modal-close").click();
+                        return res.json();
+                    }else{
+                        alert("댓글이 수정이 실패했습니다.");
+                        document.getElementById("modal-close").click();
+                        return;
+                    }
+                })
+                .then(result =>{
+                   renderReplies(result);
+                });
+        });
+    }
+
+
+    //========== 메인 실행부 ==========//
+
+    // 즉시 실행함수
+    (() => {
+
+        // 댓글 서버에서 불러오기
         fetchGetReplies();
 
-
-        // 페이지 번호 클릭 이벤트 핸들러 처리
+        // 페이지 번호 클릭 이벤트 핸들러처리
         makePageButtonClickEvent();
 
         // 댓글 등록 클릭 이벤트 핸들러 처리
         makeReplyPostClickEvent();
+
+        // 댓글 삭제 클릭 이벤트 핸들러 처리
+        makeReplyRemoveClickEvent();
+
+        //댓글 수정 클릭 이벤트
+        makeReplyModifyClickEvent();
     })();
 
 
 </script>
-
-
 
 </body>
 </html>
